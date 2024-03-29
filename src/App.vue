@@ -74,7 +74,7 @@
           </div>
           <input type="number" v-model="couponDiscountAmount" />
           <code
-            >DEBUG -> Discounted: <b>{{ couponDiscount }} THB</b></code
+            >DEBUG ONLY-> Discounted: <b>{{ couponDiscount }} THB</b></code
           >
         </div>
 
@@ -84,7 +84,6 @@
           <span>On Top</span>
         </label>
         <div v-if="isOnTopEnable">
-          <h4>2. On Top</h4>
           <!-- On Top Type Selection -->
           <div class="flex items-center pl">
             <label for="onTopByCategoryPercentage">
@@ -132,9 +131,9 @@
             />
           </div>
           <code v-if="onTopDiscountType === 'categoryPercentage'"
-            >onTopDiscountCategory: {{ onTopDiscountCategory }}</code
+            >DEBUG ONLY-> onTopDiscountCategory: {{ onTopDiscountCategory }}</code
           >
-          <code>DEBUG -> onTopDiscount: {{ onTopDiscount }}</code>
+          <code>DEBUG ONLY-> onTopDiscount: {{ onTopDiscount }}</code>
         </div>
 
         <!-- 3. Special Campaign (Seasonal) -->
@@ -166,7 +165,7 @@
           </div>
 
           <code>
-            DEBUG -> Seasonal discounted: <b>{{ seasonalDiscount }} THB</b>
+            DEBUG ONLY-> Seasonal discounted: <b>{{ seasonalDiscount }} THB</b>
           </code>
         </div>
       </div>
