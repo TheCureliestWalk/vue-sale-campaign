@@ -162,7 +162,7 @@
         <h4>
           Total Price: <b>{{ totalPrice }} THB</b>
         </h4>
-        <h4>
+        <h4 style="color: green">
           Final Price:
           <b>{{ finalPrice }} THB</b>
         </h4>
@@ -212,7 +212,6 @@ const calculateOnTopDiscount = (type, discount) => {
     const _categoryItems = selectedItems.value.filter(
       (item) => item.category.toLowerCase() === onTopDiscountCategory.value
     )
-    console.log('Category Items:', _categoryItems)
 
     // Accumulate total price of selected category items
     const _categoryTotalPrice = _categoryItems.reduce((acc, item) => acc + item.price, 0)
@@ -230,7 +229,8 @@ const calculateSeasonalDiscount = (seasonalDiscountPrice, seasonalDiscountEveryP
     typeof seasonalDiscountEveryPrice !== 'number' ||
     typeof seasonalDiscountEveryPrice !== 'number'
   ) {
-    return (seasonalDiscountEveryPrice.value = 0)
+    seasonalDiscountEveryPrice.value = 0
+    seasonalDiscountPrice.value = 0
   }
   const discount = computed(
     () => Math.floor(totalPrice.value / seasonalDiscountEveryPrice) * seasonalDiscountPrice
