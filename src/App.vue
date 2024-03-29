@@ -40,8 +40,11 @@
         <h3>Discount</h3>
 
         <!-- 1. Coupon -->
-        <div>
-          <h4>1. Coupon</h4>
+        <label>
+          <input type="checkbox" v-model="isCouponEnable" />
+          <span>Coupon</span>
+        </label>
+        <div v-if="isCouponEnable">
           <div class="flex items-center pl">
             <label for="fixed">
               <input
@@ -72,7 +75,11 @@
         </div>
 
         <!-- 2. On Top -->
-        <div>
+        <label>
+          <input type="checkbox" v-model="isOnTopEnable" />
+          <span>On Top</span>
+        </label>
+        <div v-if="isOnTopEnable">
           <h4>2. On Top</h4>
           <!-- On Top Type Selection -->
           <div class="flex items-center pl">
@@ -127,15 +134,18 @@
         </div>
 
         <!-- 3. Special Campaign (Seasonal) -->
-        <div>
-          <h4>3. Special Campaign (Seasonal)</h4>
+        <label>
+          <input type="checkbox" v-model="isSeasonalEnable" />
+          <span>Special Campaign (Seasonal)</span>
+        </label>
+        <div v-if="isSeasonalEnable">
           <small
             >Example Discount: {{ seasonalDiscountPrice }} THB at every
             {{ seasonalDiscountEveryPrice }} THB</small
           >
           <div>
-            <!-- I don't know how to call this speical deal -->
-            <label for="seasonalDiscountEveryPrice">Every Total Price (THB)</label>
+            <!-- I don't know how to call variable for this speicial deal -->
+            <label for="seasonalDiscountEveryPrice">Every (THB)</label>
             <input
               type="number"
               id="seasonalDiscountEveryPrice"
@@ -177,7 +187,14 @@ import { items } from '@/data/items.json'
 
 const selectedItems = ref([])
 
+// Discount type enable handling
+
+const isCouponEnable = ref(false)
+const isOnTopEnable = ref(false)
+const isSeasonalEnable = ref(false)
+
 const couponDiscount = ref(0)
+
 // Form handling variables
 const couponDiscountType = ref('fixed')
 const couponDiscountAmount = ref(0)
@@ -188,24 +205,35 @@ const onTopDiscountCategory = ref('clothing') // 'clothing' or 'electronics' or 
 const onTopDiscountAmount = ref(0)
 
 const seasonalDiscount = ref(0)
+
 // Form handling variables
-const seasonalDiscountEveryPrice = ref(300)
+const seasonalDiscountEveryPrice = ref(100000)
 const seasonalDiscountPrice = ref(40)
 
 const totalPrice = ref(0)
 
-// Calculation of discount price
+// Calculation of discount price logic
 
 // First Priority
 const calculateCouponDiscount = (type, discount) => {
+  // Check if input is a negative value or not a number
+  if (discount < 0) {
+    couponDiscountAmount.value = 0
+  }
+  // Percentage Discount
   if (type == 'percentage') {
     return (couponDiscount.value = totalPrice.value * (discount / 100))
   }
+  // Fixed Rate discount
   return (couponDiscount.value = discount)
 }
 
 // Second Priority
 const calculateOnTopDiscount = (type, discount) => {
+  // Check if input is a negative value
+  if (discount <= 0) {
+    discount = 0
+  }
   // Category Percentage Discount
   if (type === 'categoryPercentage') {
     // Filter only selected category items (make it lowercase for comparison)
@@ -223,19 +251,24 @@ const calculateOnTopDiscount = (type, discount) => {
 }
 
 // Third Priority
-const calculateSeasonalDiscount = (seasonalDiscountPrice, seasonalDiscountEveryPrice) => {
-  // Check to prevent the divider is 0, ortherwise will get NaN
+const calculateSeasonalDiscount = (discount, discountEvery) => {
+  // Check if input is a negative value
+  if (discount <= 0 || typeof discount !== 'number') {
+    seasonalDiscountPrice.value = 0
+  }
+  if (discountEvery <= 0 || typeof discountEvery !== 'number') {
+    seasonalDiscountEveryPrice.value = 1
+  }
+  // Check to prevent the divider is 0, otherwise will get NaN
   if (
-    typeof seasonalDiscountEveryPrice !== 'number' ||
-    typeof seasonalDiscountEveryPrice !== 'number'
+    typeof seasonalDiscountPrice.value !== 'number' ||
+    typeof seasonalDiscountEveryPrice.value !== 'number'
   ) {
     seasonalDiscountEveryPrice.value = 0
     seasonalDiscountPrice.value = 0
   }
-  const discount = computed(
-    () => Math.floor(totalPrice.value / seasonalDiscountEveryPrice) * seasonalDiscountPrice
-  ) // Discount 40 THB at every 300 THB
-  return (seasonalDiscount.value = discount.value)
+  const _discount = computed(() => Math.floor(totalPrice.value / discountEvery) * discount) // Discount 40 THB at every 300 THB
+  return (seasonalDiscount.value = _discount.value)
 }
 
 // Final Price Calc.
@@ -275,7 +308,7 @@ const addItem = (item) => {
   padding-left: 1rem;
 }
 
-label > input {
-  margin-left: 0.5rem;
+label > span {
+  padding-left: 0.5rem;
 }
 </style>
