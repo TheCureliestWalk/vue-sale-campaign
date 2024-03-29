@@ -70,7 +70,7 @@
           </div>
           <input type="number" v-model="couponDiscountAmount" />
           <code
-            >Discounted: <b>{{ couponDiscount }} THB</b></code
+            >DEBUG -> Discounted: <b>{{ couponDiscount }} THB</b></code
           >
         </div>
 
@@ -130,7 +130,7 @@
           <code v-if="onTopDiscountType === 'categoryPercentage'"
             >onTopDiscountCategory: {{ onTopDiscountCategory }}</code
           >
-          <code>onTopDiscount: {{ onTopDiscount }}</code>
+          <code>DEBUG -> onTopDiscount: {{ onTopDiscount }}</code>
         </div>
 
         <!-- 3. Special Campaign (Seasonal) -->
@@ -162,7 +162,7 @@
           </div>
 
           <code>
-            Seasonal discounted: <b>{{ seasonalDiscount }} THB</b>
+            DEBUG -> Seasonal discounted: <b>{{ seasonalDiscount }} THB</b>
           </code>
         </div>
       </div>
@@ -233,6 +233,9 @@ const calculateOnTopDiscount = (type, discount) => {
   // Check if input is a negative value
   if (discount <= 0) {
     discount = 0
+  }
+  if (discount >= 100 && type === 'categoryPercentage') {
+    discount = 100
   }
   // Category Percentage Discount
   if (type === 'categoryPercentage') {
