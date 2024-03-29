@@ -38,6 +38,10 @@
       <!-- Discount Rule -->
       <div class="column">
         <h3>Discount</h3>
+        <p>
+          If you enable mutiple Discount Type, the order of discount will be Coupon > On Top >
+          Seasonal
+        </p>
 
         <!-- 1. Coupon -->
         <label>
@@ -298,6 +302,9 @@ const addItem = (item) => {
 </script>
 
 <style>
+.container {
+  margin-bottom: 100px;
+}
 .flex {
   display: flex;
   gap: 1rem;
